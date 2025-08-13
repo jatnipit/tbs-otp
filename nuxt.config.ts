@@ -11,8 +11,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      tbsApiKey: process.env.THAI_BULK_SMS_KEY,
-      tbsApiSecret: process.env.THAI_BULK_SMS_SECRET,
+      tbsAuth: process.env.THAI_BULK_SMS_AUTH,
     },
   },
 });

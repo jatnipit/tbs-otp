@@ -45,29 +45,24 @@ const result = ref(false);
 const error = ref("");
 
 async function sendSms() {
-  const message = "กรุณากดลิ้งเพื่อยืนยันตัวตน ";
+  const message =
+    "กรุณากดลิ้งเพื่อยืนยันตัวตน \nhttps://tbs-otp.vercel.app/customer/otp";
   loading.value = true;
   result.value = false;
   error.value = "";
   try {
-    const { data, error: fetchError } = await useFetch(
-      "/api/send-link-to-user",
-      {
-        method: "POST",
-        body: {
-          msisdn: msisdn.value,
-          message: message
-        },
-      }
-    );
-    if (fetchError.value) {
-      error.value = "ส่งไม่สำเร็จ: " + fetchError.value.message;
-    } else if (data.value && data.value.error) {
-      error.value = "ส่งไม่สำเร็จ: " + data.value.error;
+    const response = await $fetch("/api/send-link-to-user", {
+      method: "POST",
+      body: {
+        msisdn: msisdn.value,
+        message: message,
+      },
+    });
+    if (response && response.error) {
+      error.value = "ส่งไม่สำเร็จ: " + response.error;
     } else {
       result.value = true;
       msisdn.value = "";
-      message.value = "";
     }
   } catch (e) {
     error.value = "เกิดข้อผิดพลาด";
