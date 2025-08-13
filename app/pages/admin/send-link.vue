@@ -45,8 +45,9 @@ const result = ref(false);
 const error = ref("");
 
 async function sendSms() {
+  const encodedMsisdn = btoa(msisdn.value);
   const message =
-    "กรุณากดลิ้งเพื่อยืนยันตัวตน \nhttps://tbs-otp.vercel.app/customer/otp";
+    `กรุณากดลิ้งเพื่อยืนยันตัวตน \nhttps://tbs-otp.vercel.app/customer/otp?msisdn=${encodedMsisdn}`;
   loading.value = true;
   result.value = false;
   error.value = "";

@@ -59,22 +59,28 @@
 </template>
 
 <script setup>
+const route = useRoute();
+const msisdn = ref("");
 const otpSent = ref(false);
 const otpValue = ref("");
 const resendCountdown = ref(0);
 let timer = null;
 
+onMounted(() => {
+  msisdn.value = atob(route.query.msisdn);
+});
+
 function sendOtp() {
+  
+
   otpSent.value = true;
   otpValue.value = "";
   startResendCountdown();
-  // TODO: Call API to send OTP
 }
 
 function resendOtp() {
   otpValue.value = "";
   startResendCountdown();
-  // TODO: Call API to resend OTP
 }
 
 function startResendCountdown() {
@@ -96,9 +102,9 @@ watch(otpValue, (val) => {
 });
 
 function verifyOtp() {
-  // TODO: Add OTP verification logic
-  // Example: alert('Verifying OTP: ' + otpValue.value);
+  console.log("Verifying OTP:", otpValue.value);
 }
+
 onUnmounted(() => {
   if (timer) clearInterval(timer);
 });
