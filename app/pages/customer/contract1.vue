@@ -1,9 +1,7 @@
 <template>
-  <div
-    class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4"
-  >
+  <div class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
     <NuxtCard class="w-full max-w-2xl">
-      <h1 class="text-xl font-semibold mb-4">สัญญา 1</h1>
+      <h1 class="text-center text-xl font-semibold mb-4">สัญญา 1</h1>
 
       <div
         ref="contractBox"
@@ -23,21 +21,21 @@
           label="ฉันได้อ่านและยอมรับเงื่อนไขในสัญญา"
         />
       </div>
-      <NuxtButton @click="rejectContract" color="error" class="mt-4">
-        ไม่ยอมรับ
-      </NuxtButton>
-      <NuxtButton
-        :disabled="!isChecked"
-        @click="confirmContract"
-        class="mt-4 right-0"
-      >
-        ยอมรับ
-      </NuxtButton>
+      <div class="mt-4 flex justify-center space-x-5">
+        <NuxtButton @click="rejectContract" color="error">
+          ไม่ยอมรับ
+        </NuxtButton>
+        <NuxtButton :disabled="!isChecked" @click="confirmContract">
+          ยอมรับ
+        </NuxtButton>
+      </div>
     </NuxtCard>
   </div>
 </template>
 
 <script setup>
+const router = useRouter();
+const route = useRoute();
 const isChecked = ref(false);
 const hasScrolledToBottom = ref(false);
 const contractBox = ref(null);
@@ -56,11 +54,29 @@ const handleScroll = () => {
 };
 
 function rejectContract() {
-  console.log("สัญญาถูกปฏิเสธ");
+  router.back();
 }
 
-function confirmContract() {
-  console.log("สัญญาถูกยอมรับ");
+async function confirmContract() {
+  const message = "ยืนยันสัญญา 1";
+  try {
+    const response = await $fetch("/api/sms/send-sms", {
+      method: "POST",
+      body: {
+        msisdn: route.query.msisdn,
+        message: message,
+      },
+    });
+
+    if (response && response.error) {
+      console.error("Error confirming contract:", response.error);
+      return;
+    }
+
+    router.push({ path: "/contract2", query: { ...route.query } });
+  } catch (error) {
+    console.error("Error confirming contract:", error);
+  }
 }
 
 onMounted(() => {

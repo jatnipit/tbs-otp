@@ -52,11 +52,29 @@ const handleScroll = () => {
 };
 
 function rejectContract() {
-  console.log("สัญญาถูกปฏิเสธ");
+  router.back();
 }
 
-function confirmContract() {
-  console.log("สัญญาถูกยอมรับ");
+async function confirmContract() {
+  const message = "ยืนยันสัญญา 2";
+  try {
+    const response = await $fetch("/api/sms/send-sms", {
+      method: "POST",
+      body: {
+        msisdn: route.query.msisdn,
+        message: message,
+      },
+    });
+
+    if (response && response.error) {
+      console.error("Error confirming contract:", response.error);
+      return;
+    }
+
+    router.push({ path: "/success", query: { ...route.query } });
+  } catch (error) {
+    console.error("Error confirming contract:", error);
+  }
 }
 
 onMounted(() => {

@@ -1,13 +1,16 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { msisdn, pin, token } = body;
+  const { pin, token } = body;
+  console.log(
+    `Verifying OTP for MSISDN: ${msisdn}, PIN: ${pin}, Token: ${token}`
+  );
 
   const config = useRuntimeConfig();
 
   const API_URL = "https://otp.thaibulksms.com/v2/otp/verify";
 
   const params = new URLSearchParams();
-  params.set("msisdn", msisdn);
+  params.set("key", config.public.otpKey);
   params.set("secret", config.public.otpSecret);
   params.set("token", token);
   params.set("pin", pin);

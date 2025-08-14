@@ -46,13 +46,12 @@ const error = ref("");
 
 async function sendSms() {
   const encodedMsisdn = btoa(msisdn.value);
-  const message =
-    `กรุณากดลิ้งเพื่อยืนยันตัวตน \nhttps://tbs-otp.vercel.app/customer/otp?msisdn=${encodedMsisdn}`;
+  const message = `กรุณากดลิ้งเพื่อยืนยันตัวตน \nhttps://tbs-otp.vercel.app/customer/otp?msisdn=${encodedMsisdn}`;
   loading.value = true;
   result.value = false;
   error.value = "";
   try {
-    const response = await $fetch("/api/send-link-to-user", {
+    const response = await $fetch("/api/sms/send-sms", {
       method: "POST",
       body: {
         msisdn: msisdn.value,
