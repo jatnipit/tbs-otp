@@ -35,5 +35,4 @@
 </template>
 
 <script setup>
-// No script logic needed for simple static menu
 </script>

@@ -34,6 +34,8 @@
 </template>
 
 <script setup>
+const router = useRouter();
+const route = useRoute();
 const isChecked = ref(false);
 const hasScrolledToBottom = ref(false);
 const contractBox = ref(null);
@@ -71,7 +73,7 @@ async function confirmContract() {
       return;
     }
 
-    router.push({ path: "/success", query: { ...route.query } });
+    router.push({ path: "/customer/success", query: { ...route.query } });
   } catch (error) {
     console.error("Error confirming contract:", error);
   }

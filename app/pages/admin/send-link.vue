@@ -34,6 +34,7 @@
       <div v-if="error" class="mt-4 text-red-600 text-center">
         {{ error }}
       </div>
+      <BackButton />
     </div>
   </div>
 </template>

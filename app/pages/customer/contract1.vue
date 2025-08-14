@@ -73,7 +73,7 @@ async function confirmContract() {
       return;
     }
 
-    router.push({ path: "/contract2", query: { ...route.query } });
+    router.push({ path: "/customer/contract2", query: { ...route.query } });
   } catch (error) {
     console.error("Error confirming contract:", error);
   }

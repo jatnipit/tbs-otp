@@ -149,7 +149,7 @@ async function verifyOtp() {
       console.log("OTP verification failed:", response);
     } else {
       router.push({
-        path: "/contract1",
+        path: "/customer/contract1",
         query: { msisdn: msisdn.value },
       });
     }
