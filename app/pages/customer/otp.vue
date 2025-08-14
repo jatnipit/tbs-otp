@@ -39,6 +39,12 @@
         >
           ยืนยันรหัส
         </NuxtButton>
+        <div
+          v-if="otpError"
+          class="w-full bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-2 text-center"
+        >
+          {{ otpError }}
+        </div>
         <div class="mt-4 text-sm text-gray-500">
           <span v-if="resendCountdown > 0">
             ขอส่งรหัสใหม่ได้ใน {{ resendCountdown }} วินาที
@@ -64,22 +70,50 @@ const msisdn = ref("");
 const otpSent = ref(false);
 const otpValue = ref("");
 const resendCountdown = ref(0);
+const otpError = ref("");
+const token = ref("");
 let timer = null;
 
 onMounted(() => {
   msisdn.value = atob(route.query.msisdn);
 });
 
-function sendOtp() {
-  
+async function sendOtp() {
+  try {
+    const response = await $fetch("/api/otp/request", {
+      method: "POST",
+      body: {
+        msisdn: msisdn.value,
+      },
+    });
+    token.value = response.token;
+    console.log("OTP sent successfully:", response);
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+  }
 
   otpSent.value = true;
   otpValue.value = "";
+  otpError.value = "";
   startResendCountdown();
 }
 
-function resendOtp() {
+async function resendOtp() {
+  try {
+    const response = await $fetch("/api/otp/request", {
+      method: "POST",
+      body: {
+        msisdn: msisdn.value,
+      },
+    });
+    token.value = response.token;
+    console.log("OTP resent successfully:", response);
+  } catch (error) {
+    console.error("Error resending OTP:", error);
+  }
+
   otpValue.value = "";
+  otpError.value = "";
   startResendCountdown();
 }
 
@@ -95,14 +129,25 @@ function startResendCountdown() {
   }, 1000);
 }
 
-watch(otpValue, (val) => {
-  if (val.length === 6) {
-    verifyOtp();
+async function verifyOtp() {
+  try {
+    const response = await $fetch("/api/otp/verify", {
+      method: "POST",
+      body: {
+        msisdn: msisdn.value,
+        pin: otpValue.value,
+        token: token.value,
+      },
+    });
+    if (response && response.error) {
+      otpError.value = response.error;
+    } else {
+      otpError.value = "";
+      console.log("OTP verified successfully:", response);
+    }
+  } catch (error) {
+    otpError.value = error.message || "เกิดข้อผิดพลาดในการยืนยันรหัส OTP";
   }
-});
-
-function verifyOtp() {
-  console.log("Verifying OTP:", otpValue.value);
 }
 
 onUnmounted(() => {
