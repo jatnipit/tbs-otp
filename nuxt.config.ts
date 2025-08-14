@@ -11,9 +11,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      tbsAuth: process.env.TBS_AUTH,
-      otpSecret: process.env.TBS_OTP_SECRET,
-      otpKey: process.env.TBS_OTP_KEY,
+      tbsAuth: process.env.TBS_DEENA_AUTH,
+      otpSecret: process.env.TBS_DEENA_OTP_SECRET,
+      otpKey: process.env.TBS_DEENA_OTP_KEY,
     },
   },
 });
