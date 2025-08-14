@@ -82,11 +82,13 @@ async function sendOtp() {
   try {
     const response = await $fetch("/api/otp/request", {
       method: "POST",
-      body: {
-        msisdn: msisdn.value,
-      },
+      body: { msisdn: msisdn.value },
     });
     token.value = response.token;
+    if (response && response.error) {
+      console.log("OTP sent failed:", response);
+      return;
+    }
     console.log("OTP sent successfully:", response);
   } catch (error) {
     console.error("Error sending OTP:", error);
@@ -102,9 +104,7 @@ async function resendOtp() {
   try {
     const response = await $fetch("/api/otp/request", {
       method: "POST",
-      body: {
-        msisdn: msisdn.value,
-      },
+      body: { msisdn: msisdn.value },
     });
     token.value = response.token;
     console.log("OTP resent successfully:", response);
@@ -131,13 +131,16 @@ function startResendCountdown() {
 
 async function verifyOtp() {
   try {
-    const response = await $fetch("/api/otp/verify", {
+    const response = await fetch("/api/otp/verify", {
       method: "POST",
-      body: {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         msisdn: msisdn.value,
         pin: otpValue.value,
         token: token.value,
-      },
+      }),
     });
     if (response && response.error) {
       otpError.value = response.error;

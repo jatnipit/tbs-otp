@@ -11,11 +11,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      tbsAuth: process.env.THAI_BULK_SMS_AUTH,
-      otp: {
-        secret: process.env.TBS_OTP_SECRET,
-        key: process.env.TBS_OTP_KEY,
-      },
+      tbsAuth: process.env.TBS_AUTH,
+      otpSecret: process.env.TBS_OTP_SECRET,
+      otpKey: process.env.TBS_OTP_KEY,
     },
   },
 });

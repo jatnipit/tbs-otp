@@ -1,6 +1,7 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { msisdn } = body;
+
+  const msisdn = body.msisdn;
 
   const config = useRuntimeConfig();
 
@@ -8,8 +9,9 @@ export default defineEventHandler(async (event) => {
 
   const params = new URLSearchParams();
   params.set("msisdn", msisdn);
-  params.set("secret", config.otp.secret);
-  params.set("key", config.otp.key);
+  params.set("secret", config.public.otpSecret);
+  params.set("key", config.public.otpKey);
+  console.log(params.toString());
 
   try {
     const response = await $fetch(API_URL, {
@@ -20,6 +22,7 @@ export default defineEventHandler(async (event) => {
       },
       body: params,
     });
+    console.log("OTP request response:", response);
     return response;
   } catch (error) {
     return { error: error.message };

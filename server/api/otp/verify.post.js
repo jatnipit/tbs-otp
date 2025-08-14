@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   const params = new URLSearchParams();
   params.set("msisdn", msisdn);
-  params.set("secret", config.otp.secret);
+  params.set("secret", config.public.otpSecret);
   params.set("token", token);
   params.set("pin", pin);
 
