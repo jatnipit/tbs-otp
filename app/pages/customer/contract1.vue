@@ -59,6 +59,15 @@ function rejectContract() {
 
 async function confirmContract() {
   const message = "ยืนยันสัญญา 1";
+
+  const response = await sendSms(message);
+
+  if (response) {
+    router.push({ path: "/customer/contract2", query: { ...route.query } });
+  }
+}
+
+async function sendSms(message) {
   try {
     const response = await $fetch("/api/sms/send-sms", {
       method: "POST",
@@ -73,7 +82,7 @@ async function confirmContract() {
       return;
     }
 
-    router.push({ path: "/customer/contract2", query: { ...route.query } });
+    return response;
   } catch (error) {
     console.error("Error confirming contract:", error);
   }

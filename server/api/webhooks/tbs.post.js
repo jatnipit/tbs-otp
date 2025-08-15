@@ -1,21 +1,20 @@
 export default defineEventHandler(async (event) => {
-  const service = getRouterParam(event, "service");
   const body = await readBody(event);
-  const headers = getHeaders(event);
+  const query = getQuery(event);
 
-  console.log(`Webhook received from ${service}:`, {
-    headers,
-    body,
-  });
+  const logLine = `${new Date().toISOString()} Data: ${JSON.stringify(body)}\n`;
 
-  try {
-    const signature = headers["stripe-signature"];
-    return { success: true };
-  } catch (error) {
-    console.error(`Error processing webhook from ${service}:`, error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: `Error processing webhook: ${error.message}`,
-    });
+  const transactionId = body.Transaction;
+  const status = body.Status;
+  const time = body.Time;
+
+  if (body) {
+    console.log(
+      `Transaction ID: ${transactionId}, Status: ${status}, Time: ${time}`
+    );
+  } else if (query) {
+    console.log(`Query parameters: ${JSON.stringify(query)}`);
   }
+
+  // return `${transactionId} ${status} ${time}`;
 });
