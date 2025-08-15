@@ -21,7 +21,7 @@
           label="ฉันได้อ่านและยอมรับเงื่อนไขในสัญญา"
         />
       </div>
-      <div class="mt-4 flex justify-center space-x-5">
+      <div class="mt-4 flex justify-center text-center space-x-5">
         <NuxtButton @click="rejectContract" color="error">
           ไม่ยอมรับ
         </NuxtButton>
