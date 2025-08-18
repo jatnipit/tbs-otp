@@ -93,10 +93,6 @@ const isOtpValid = computed(() => {
   return cleanOtp.length === 6;
 });
 
-const cleanOtpValue = (value) => {
-  return String(value || "").replace(/[,\s]/g, "");
-};
-
 const clearError = () => {
   state.error = "";
 };
@@ -201,7 +197,7 @@ const handleResendOtp = async () => {
 };
 
 const handleVerifyOtp = async () => {
-  const cleanPin = cleanOtpValue(state.otpValue);
+  const cleanPin = String(state.otpValue || "").replace(/[,\s]/g, "");
 
   if (!cleanPin || cleanPin.length !== 6) {
     state.error = "กรุณากรอกรหัส OTP 6 หลักให้ครบถ้วน";

@@ -1,6 +1,11 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { msisdn, message, sender = "Demo" } = body || {};
+  const {
+    msisdn,
+    message,
+    sender = "PASSENGER",
+    force = "corporate",
+  } = body || {};
 
   const config = useRuntimeConfig();
 
@@ -11,6 +16,7 @@ export default defineEventHandler(async (event) => {
   params.set("msisdn", msisdn);
   params.set("message", message);
   params.set("sender", sender);
+  params.set("force", force);
 
   try {
     const response = await $fetch(API_URL, {

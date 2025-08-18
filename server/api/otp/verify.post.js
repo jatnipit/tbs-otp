@@ -1,9 +1,6 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const { pin, token } = body;
-  console.log(
-    `Verifying OTP for MSISDN: ${msisdn}, PIN: ${pin}, Token: ${token}`
-  );
 
   const config = useRuntimeConfig();
 
